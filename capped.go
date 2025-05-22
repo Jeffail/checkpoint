@@ -36,6 +36,13 @@ func (c *Capped[T]) Highest() *T {
 	return c.t.Highest()
 }
 
+// Pending returns the gap between the baseline and the end of our checkpoints.
+func (c *Capped[T]) Pending() int64 {
+	c.cond.L.Lock()
+	defer c.cond.L.Unlock()
+	return c.t.Pending()
+}
+
 // Track a new unresolved integer offset. This offset will be cached until it is
 // marked as resolved. While it is cached no higher valued offset will ever be
 // committed. If the provided value is lower than an already provided value an
